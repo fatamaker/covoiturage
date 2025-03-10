@@ -26,13 +26,14 @@ const register = async (req, res) => {
             const user = new User({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                email: req.body.email,
-                address: req.body.address,
-                phone: req.body.phone,
                 imageUrl: req.body.imageUrl,
-                password: hashedPass,
-                gender: req.body.gender,
                 birthDate: req.body.birthDate,
+                email: req.body.email,
+                role: req.body.role,
+                phone: req.body.phone,
+                password: hashedPass,
+                governorate: req.body.governorate,
+               
             });
 
            

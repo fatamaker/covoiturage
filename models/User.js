@@ -3,50 +3,44 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   firstName: {
+    type: String,
     required: true,
-    type: String
   },
   lastName: {
     type: String,
     required: true,
-
   },
   imageUrl:{
     type: String,
-    
-
+  },
+  birthDate: {
+    type: Date,
+    required: true,
   },
   email: {
     type: String,
     required: true,
-
-  },
-  address: {
-    type: String,
-
+    unique: true,
   },
   phone: {
     type: String,
-
+    required: true,
   },
   password: {
     type: String,
     required: true,
     minlength: 8,
   },
-
-  gender: {
+  role: {
     type: String,
-    enum: ['male', 'female',''],
-    default:''
+    enum: ['Passager', 'Conducteur'],
+    required: true,
   },
-  birthDate: {
-    type: Date,
+  governorate: {
+    type: String,
+    required: true,
   },
-  
 }, { timestamps: true });
 
-const user = mongoose.model('User', userSchema);
-module.exports = user;
-
-
+const User = mongoose.model('User', userSchema);
+module.exports = User;
