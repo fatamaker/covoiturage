@@ -11,7 +11,7 @@ const OTP = require('../models/OTP');
 const register = async (req, res) => {
     try {
        
-        const userExists = await User.countDocuments({ email: req.body.email });
+        const userExists = await User.countDocuments({ phone: req.body.phone });
         if (userExists > 0) {
             return res.status(403).json({ message: "User already exists" });
         }
@@ -51,10 +51,12 @@ const register = async (req, res) => {
 // Login function
 // This function verifies the user's credentials and generates JWT and refresh tokens upon successful login.
 const login = (req, res) => {
-    const { email, password } = req.body;
+    const { phone, password } = req.body;
 
     // Find the user by email
-    User.findOne({ email }).then(user => {
+    
+
+    User.findOne({  phone }).then(user => {
         if (!user) {
             return res.status(404).json({ message: "No user found" });
         }
@@ -67,7 +69,7 @@ const login = (req, res) => {
 
             if (result) {
                 // Generate JWT token and refresh token
-                const token = jwt.sign({ email: user.email }, 'secretValue', { expiresIn: '7d' });
+                const token = jwt.sign({  phone: user.phone }, 'secretValue', { expiresIn: '7d' });
                 const refreshToken = jwt.sign({ name: user.firstName }, 'refreshtokensecret', { expiresIn: '7d' });
 
                 // Calculate token expiration time

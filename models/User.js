@@ -20,22 +20,19 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
+    
   },
   phone: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
     minlength: 8,
   },
-  role: {
-    type: String,
-    enum: ['Passager', 'Conducteur'],
-    required: true,
-  },
+  
   governorate: {
     type: String,
     required: true,
