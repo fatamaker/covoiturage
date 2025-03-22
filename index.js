@@ -12,6 +12,8 @@ app.use(cors());
 
 // Routes
 const AuthRoute = require ('./routers/Auth')
+const rideRoutes = require("./routers/rideRoutes");
+const vehicleRoutes = require("./routers/vehicleRoutes");
 
 
 // Middleware
@@ -33,6 +35,8 @@ app.use("/uploads/images", express.static("uploads/images"));
 
 
   app.use('/api', AuthRoute);
+  app.use("/api/rides", rideRoutes);
+  app.use("/api/vehicles", vehicleRoutes);
 
 
 
