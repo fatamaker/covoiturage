@@ -122,32 +122,59 @@ const profilgetById = async (req, res) => {
 
 
 // Update user profile
-// This function updates the user's profile information such as name, email, phone, address, and other fields.
-const UpdateProfil = async (req, res) => {
-    const { firstName, lastName, id, phone, address, gender, birthDate } = req.body;
+const UpdateProfile = async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, phone, governorate, birthDate } = req.body;
 
-  
-    try {
-        // Update the user details in the database
-        const updatedUser = await User.findByIdAndUpdate(
-            id,
-            { firstName, lastName, phone, address, gender, birthDate },
-            { new: true }
-        );
+  // Validate governorate
+  if (!governorate.includes(governorate)) {
+    return res.status(400).json({ 
+      message: "Invalid governorate value",
+      validGovernorates: governorates
+    });
+  }
 
+  try {
+    const updateData = {
+      firstName,
+      lastName,
+      phone,
+      governorate,
+      birthDate: new Date(birthDate)
+    };
 
-        if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { 
+        new: true,
+        runValidators: true
+      }
+    ).select('-password');
 
-        res.status(200).json({
-            message: "Profile updated successfully",
-            updatedUser,
-        });
-    }  catch (error) {
-        console.error("Error updating profile:", error);
-        res.status(500).json({ message: "Profile not updated", error: error.message });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ 
+        message: "Validation error",
+        errors: error.errors 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: "Error updating profile",
+      error: error.message});
+}
 };
 
 // Refresh JWT token
@@ -541,7 +568,7 @@ module.exports = {
     register,
     login,
     profilgetById,
-    UpdateProfil,
+    UpdateProfile,
     refreshtoken,
     updatepassword,
     forgetPassword,

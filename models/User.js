@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const governorates = [
+  "Ariana", "Beja", "Ben Arous", "Bizerte", "Gabes", "Gafsa", "Jendouba",
+  "Kairouan", "Kasserine", "Kebili", "Kef", "Mahdia", "Manouba", "Medenine",
+  "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse",
+  "Tataouine", "Tozeur", "Tunis", "Zaghouan"
+];
+
 const userSchema = new Schema({
   firstName: {
     type: String,
@@ -12,6 +19,7 @@ const userSchema = new Schema({
   },
   imageUrl:{
     type: String,
+    default: "",
   },
   birthDate: {
     type: Date,
@@ -36,8 +44,10 @@ const userSchema = new Schema({
   governorate: {
     type: String,
     required: true,
+    enum: governorates, // Add enum validation
+    trim: true
   },
 }, { timestamps: true });
-
+userSchema.index({ governorate: 1 }); 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

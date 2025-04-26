@@ -14,6 +14,7 @@ app.use(cors());
 const AuthRoute = require ('./routers/Auth')
 const rideRoutes = require("./routers/rideRoutes");
 const vehicleRoutes = require("./routers/vehicleRoutes");
+const reservationRoutes = require('./routers/reservationRoutes');
 
 
 // Middleware
@@ -30,13 +31,15 @@ app.use("/uploads/images", express.static("uploads/images"));
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
-
+ 
+  
 
 
 
   app.use('/api', AuthRoute);
   app.use("/api/rides", rideRoutes);
   app.use("/api/vehicles", vehicleRoutes);
+  app.use('/api/reservations', reservationRoutes);
 
 
 
